@@ -1,4 +1,4 @@
-module github.com/tsliwowicz/go-wrk
+module github.com/justinlu/go-wrk
 
 go 1.16
 
