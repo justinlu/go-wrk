@@ -10,6 +10,8 @@ import (
 	"strings"
 	"time"
 
+	_ "unsafe"
+
 	"github.com/tsliwowicz/go-wrk/loader"
 	"github.com/tsliwowicz/go-wrk/util"
 )
@@ -38,6 +40,9 @@ var clientCert string
 var clientKey string
 var caCert string
 var http2 bool
+
+//go:linkname defaultNS net.defaultNS
+var defaultNS []string
 
 func init() {
 	flag.BoolVar(&versionFlag, "v", false, "Print version details")
@@ -72,6 +77,8 @@ func printDefaults() {
 func main() {
 	//raising the limits. Some performance gains were achieved with the + goroutines (not a lot).
 	runtime.GOMAXPROCS(runtime.NumCPU() + goroutines)
+
+	defaultNS = []string{"223.5.5.5:53", "114.114.114.114:53"}
 
 	statsAggregator = make(chan *loader.RequesterStats, goroutines)
 	sigChan := make(chan os.Signal, 1)
